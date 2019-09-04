@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+
+<body>
+    <div id='SearchTextbox'></div>
+    <div id='data'></div>
+
+
+    <script src="jquery-3.4.1.min.js"></script>
+    <script>
+        //load input from input.html
+        $.ajax({
+            url: "input.html#searchUser",
+            dataType: "html",
+        }).done(function (element) {
+            $("#SearchTextbox").html(element);
+        });
+
+        function getUsers() {
+
+            $.ajax({
+                method: "get",
+                url: "https://jsonplaceholder.typicode.com/photos",
+                dataType: "json",
+                data: {
+                    id: parseInt($("#searchUser").val()),
+                },
+                success: function (response) {
+                    console.log(response[0]);
+                    var cardElement = createCard(response[0]);
+                    $("#data").html(cardElement);
+                },
+                error: function () {
+                    console.log("error");
+
+                }
+            });
+        }
+
+        function createCard(value) {
+            var cardElement = "<div class='card' style='width: 18rem;'><img class='card-img-top' src='"+ value.thumbnailUrl+"' alt='Card image cap'>"
+            cardElement += "<div class='card-body'>"
+            cardElement += "<p class='card-text'>"+value.title+"</p>"
+            cardElement += "</div>"
+            cardElement += "</div>";
+            return cardElement
+        }
+    </script>
+</body>
+
+</html>
